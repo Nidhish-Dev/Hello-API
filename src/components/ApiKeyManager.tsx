@@ -131,12 +131,16 @@ const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({ token }) => {
 {`<script>
     const apiKey = 'YOUR_API_KEY_HERE'; // Replace with your API key
 
-    function fetchHelloMessage() {
-        axios.get(\`https://api-service-server.vercel.app/api/hello?apiKey=\${apiKey}\`)
-            .then(response => {
-                document.getElementById('helloResponse').textContent = JSON.stringify(response.data, null, 2);
-            });
-    }
+    fetch(\`https://api-service-server.vercel.app/api/hello?apiKey=\${apiKey}\`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => console.log('Response data:', data))
+    .catch(error => console.error('There was a problem with the fetch operation:', error));
+
 </script>`}
         </pre>
     </div>
